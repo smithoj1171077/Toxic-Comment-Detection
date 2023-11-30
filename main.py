@@ -12,6 +12,7 @@ from torch.nn import Embedding
 from torch.nn import Dropout1d
 from torch.nn import LSTM
 from torch.nn import Conv1d
+import torch.utils
 
 # define the maximum number of tokens to have an embedding vector computed
 max_features = 100000
@@ -100,6 +101,38 @@ class BiLSTMCNN(nn.Module):
         prediction = nn.functional.softmax(output)
         return prediction
 
+# prep the data for training
+trainloader = torch.utils.data.DataLoader(embedding_tensor, batch_size=32, shuffle=True, num_worders=2)
+
+
+
+model = BiLSTMCNN(max_features, embed_size, embedding_tensor)
+
+# define cost function as binary cross entropy loss
+criterion = nn.BCELoss()
+optimizer = torch.optim.SGD(model.parameters(),lr=0.001,momentum=0.9)
+
+for epoch in range(1):
+    running_loss = 0.0
+    for i, data in enumerate(trainloader,0):
+        inputs,labels = data
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward + backward + optimize
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        # print statistics
+        running_loss += loss.item()
+
+        if i % 2000 == 1999:  # print every 2000 mini-batches
+            print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
+            running_loss = 0.0
+
+print('Finished training')
 
 
 
