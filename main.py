@@ -68,17 +68,7 @@ class BiLSTMCNN(nn.Module):
         20%-50%, 35% is a good middle ground between over fitted and under fitted. 
         """
         self.dropout = Dropout1d(p=0.35)
-        """ LSTM with bidirectional layering. 
-        One example of why bidirectionality would be important is in comments responding to abusive comments:
-        
-        'i understand people are rightfully outraged, but is it really necessary to tell them to
-        kill themselves, that's pretty horrible' 
-        
-        A unidirectional model may see the fragment 'kill themselves' 
-        as abusive without understanding the interplay between that phrase and the next phrase which condemns such 
-        language as reprehensible. A Bidirectional model makes passes from both sides and can better understand the 
-        provocative language as not intended as abusive in the wider context.  
-        """
+        """ LSTM with bidirectional layering"""
 
         """Our LSTM has 128 units, each unit has a cell which contains a value called a cell state, 
         the cell state can only be modified by percentage factor determined by the forget gate and/or
