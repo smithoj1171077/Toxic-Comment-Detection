@@ -15,7 +15,6 @@ EMBEDDINGS_PATH = 'glove.840B.300d.txt'
 try:
     embeddings_index = joblib.load('embeddings_index.joblib')
 except FileNotFoundError:
-
     # the format of the file is word_0, embedding_vector_values, word_1, embedding_vector_values, ...
     embeddings_index = {}
     print("starting import")
@@ -23,7 +22,7 @@ except FileNotFoundError:
         for i, line in enumerate(f):
             if i > 5000:
                 break
-            print("line ", i)
+            # print("line ", i)
             values = line.rstrip().rsplit(' ')
             word = values[0]
             # Convert embedding values to 32-bit floats since pytorch has a default float size of 32 bits
